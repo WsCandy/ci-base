@@ -1,4 +1,5 @@
 # Docker CI Base
+[![CircleCI](https://circleci.com/gh/WsCandy/ci-base.svg?style=shield)](https://circleci.com/gh/WsCandy/ci-base)
 
 This docker image contains the bare minimum required to build projects on CircleCI. This image should be used as a base image for anything done on CircleCI. 
 
