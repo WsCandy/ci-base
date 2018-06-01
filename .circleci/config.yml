@@ -1,0 +1,58 @@
+defaults: &defaults
+  docker:
+    - image: wscandy/ci-docker
+      auth:
+        username: $DOCKERHUB_USERNAME
+        password: $DOCKERHUB_PASSWORD
+  working_directory: ~/repo
+  environment:
+    VERSION: "1.0.0"
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Images
+          command: |
+              docker build -t $DOCKERHUB_USER/ci-base:$VERSION -t $DOCKERHUB_USER/ci-base .
+              docker save -o docker_cache/$VERSION.tar
+              docker save -o docker_cache/ci-base.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - docker_cache
+  push:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Push Images
+          command: |
+              docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+              docker load < docker_cache/$VERSION.tar
+              docker push $DOCKERHUB_USER/ci-base:$VERSION
+              docker load < docker_cache/ci-base.tar
+              docker push $DOCKERHUB_USER/ci-base
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          context: wscandy
+      - push:
+          context: wscandy
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
