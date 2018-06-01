@@ -21,8 +21,8 @@ jobs:
           command: |
               mkdir -p docker_cache
               docker build -t $DOCKERHUB_USER/ci-base:$VERSION -t $DOCKERHUB_USER/ci-base .
-              docker save -o docker_cache/$VERSION.tar
-              docker save -o docker_cache/ci-base.tar
+              docker save -o docker_cache/$VERSION.tar $DOCKERHUB_USER/ci-base:$VERSION
+              docker save -o docker_cache/ci-base.tar $DOCKERHUB_USER/ci-base
       - persist_to_workspace:
           root: .
           paths:
