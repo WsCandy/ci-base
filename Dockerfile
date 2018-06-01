@@ -10,3 +10,6 @@ RUN apk add --update --virtual ca-certificates && \
 
 RUN apk add --update --virtual openssh-client && \
     rm -rf /var/cache/apk/*
+
+RUN apk add --update --virtual bash && \
+    rm -rf /var/cache/apk/*

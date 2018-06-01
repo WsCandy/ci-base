@@ -15,3 +15,7 @@ In your `.circleci/config.yml` simply add the following:
       - image: wscandy/ci-base
 
 Happy building..!
+
+## Bash
+
+Bash has been added to the container for good measure, despite it not being necessary for CircleCI to function.
