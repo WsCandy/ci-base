@@ -66,7 +66,7 @@ workflows:
       - push:
           context: wscandy
           requires:
-            - build_tagged
+            - build
           filters:
             tags:
               only: /.*/
