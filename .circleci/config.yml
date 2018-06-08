@@ -60,8 +60,7 @@ workflows:
             tags:
               only: /.*/
             branches:
-              branches:
-                ignore: /.*/
+              ignore: /.*/
       - push:
           context: wscandy
           requires:
@@ -70,5 +69,4 @@ workflows:
             tags:
               only: /.*/
             branches:
-              branches:
-                ignore: /.*/
+              ignore: /.*/
