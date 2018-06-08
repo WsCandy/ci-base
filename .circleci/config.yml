@@ -2,6 +2,8 @@ defaults: &defaults
   docker:
     - image: wscandy/ci-docker
   working_directory: ~/repo
+  environment:
+    IMAGE: "ci-docker"
 
 version: 2
 jobs:
@@ -14,7 +16,7 @@ jobs:
       - run:
           name: Build Images
           command: |
-              docker build -t $DOCKERHUB_USER/ci-base .
+              docker build -t $DOCKERHUB_USER/$IMAGE .
   build_tagged:
     <<: *defaults
     steps:
@@ -25,9 +27,9 @@ jobs:
           name: Build Images
           command: |
               mkdir -p docker_cache
-              docker build -t $DOCKERHUB_USER/ci-base:$CIRCLE_TAG -t $DOCKERHUB_USER/ci-base .
-              docker save -o docker_cache/$CIRCLE_TAG.tar $DOCKERHUB_USER/ci-base:$CIRCLE_TAG
-              docker save -o docker_cache/ci-base.tar $DOCKERHUB_USER/ci-base
+              docker build -t $DOCKERHUB_USER/$IMAGE:$CIRCLE_TAG -t $DOCKERHUB_USER/$IMAGE .
+              docker save -o docker_cache/$CIRCLE_TAG.tar $DOCKERHUB_USER/$IMAGE:$CIRCLE_TAG
+              docker save -o docker_cache/$IMAGE.tar $DOCKERHUB_USER/$IMAGE
       - persist_to_workspace:
           root: .
           paths:
@@ -44,9 +46,9 @@ jobs:
           command: |
               docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
               docker load < docker_cache/$CIRCLE_TAG.tar
-              docker push $DOCKERHUB_USER/ci-base:$CIRCLE_TAG
-              docker load < docker_cache/ci-base.tar
-              docker push $DOCKERHUB_USER/ci-base
+              docker push $DOCKERHUB_USER/$IMAGE:$CIRCLE_TAG
+              docker load < docker_cache/$IMAGE.tar
+              docker push $DOCKERHUB_USER/$IMAGE
 
 workflows:
   version: 2
