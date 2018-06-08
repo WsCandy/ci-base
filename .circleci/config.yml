@@ -3,7 +3,7 @@ defaults: &defaults
     - image: wscandy/ci-docker
   working_directory: ~/repo
   environment:
-    IMAGE: "ci-docker"
+    IMAGE: "ci-base"
 
 version: 2
 jobs:
