@@ -56,7 +56,7 @@ workflows:
           context: wscandy
   build_deploy:
     jobs:
-      - build:
+      - build_tagged:
           context: wscandy
           filters:
             tags:
@@ -66,7 +66,7 @@ workflows:
       - push:
           context: wscandy
           requires:
-            - build
+            - build_tagged
           filters:
             tags:
               only: /.*/
