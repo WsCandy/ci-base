@@ -1,9 +1,6 @@
 defaults: &defaults
   docker:
     - image: wscandy/ci-docker
-      auth:
-        username: $DOCKERHUB_USERNAME
-        password: $DOCKERHUB_PASSWORD
   working_directory: ~/repo
 
 version: 2
@@ -53,7 +50,8 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
+      - build:
+          context: wscandy
       - build_tagged:
           context: wscandy
           filters:
