@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: wscandy/ci-docker
+    - image: wscandy/ci-docker:1.1.0
   working_directory: ~/repo
   environment:
     IMAGE: "ci-base"
